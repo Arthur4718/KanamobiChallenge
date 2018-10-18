@@ -1,20 +1,43 @@
 package devarthur.post.gitrepos;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import devarthur.post.gitrepos.adapter.RecyclerViewAdapter;
+import devarthur.post.gitrepos.model.GitrepoDataModel;
+
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    //Member Variables.
+    private List<GitrepoDataModel> GitRepoList;
+    private RecyclerView mRecyclerView;
+    private RecyclerViewAdapter myRecyclerViewAdapter;
+
+    //Constants
+    private static final String GITAPI_URL = "";
+    //TODO check for the correct base URL
+
+
+    //TODO create a login to populate recycler view with local data.
+
+
+    //TODO create a logic to populate the recycler view with data from GIT API
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +54,55 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        mRecyclerView = findViewById(R.id.myRecyclerView);
+
+        //Holds all data models in a Array List
+        GitRepoList = new ArrayList<>();
+        populateRecyclerView();
+
+
     }
+
+    private void getDataFromNetWork(){
+
+        //TODO Use the design pattern from this https://www.youtube.com/watch?v=nqty1cT69yk
+
+
+    }
+
+    private void populateRecyclerView(){
+        //TODO remove after setting up the GET method from GIT hub API.
+
+        for(int i = 0; i < 10; i++){
+
+            GitrepoDataModel gitItem = new GitrepoDataModel();
+            gitItem.setRepoName("Repo: " + String.valueOf(i));
+            gitItem.setRepoDesc("Description: " + String.valueOf(i));
+            gitItem.setForkCount("forkCount: " + String.valueOf(i * 10));
+            gitItem.setStarCount("starCount: " + String.valueOf(i * 10));
+            gitItem.setUsername("Username: " + String.valueOf(i));
+            gitItem.setFullname("fullname" + String.valueOf(i));
+            gitItem.setHtml_url("https://github.com/Arthur4718");
+            gitItem.setPull_url("https://github.com/Arthur4718");
+            gitItem.setAvatar_url("https://github.com/Arthur4718");
+            gitItem.setLanguague("Java");
+            GitRepoList.add(gitItem);
+
+        }
+        //Used to test the recycler while there is not connection to the api.
+
+        feedRecyclerView(GitRepoList);
+
+    }
+
+    private void feedRecyclerView(List<GitrepoDataModel>  dataList) {
+        RecyclerViewAdapter myRecyclerViewAdapter = new RecyclerViewAdapter(getApplicationContext(), dataList);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        mRecyclerView.setAdapter(myRecyclerViewAdapter);
+    }
+
+
 
     @Override
     public void onBackPressed() {
@@ -72,7 +143,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            //TODO Create new item navigations
+
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -85,7 +157,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

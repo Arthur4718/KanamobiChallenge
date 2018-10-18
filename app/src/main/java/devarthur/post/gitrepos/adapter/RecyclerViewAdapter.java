@@ -2,12 +2,14 @@ package devarthur.post.gitrepos.adapter;
 
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -50,7 +52,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int i) {
+    public void onBindViewHolder(MyViewHolder holder, final int i) {
 
 
         holder.repoName_tv.setText(mData.get(i).getRepoName());
@@ -65,6 +67,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .load(mData.get(i).getAvatar_url())
                 .apply(requestOptions)
                 .into(holder.avatarThumb);
+
+
+        //Sets an onclick listener to every cardview.
+
+        holder.cardview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO pass the repo url, pull url and other information though intent for the next screen./
+
+
+                //Debug
+                Toast.makeText(mContext, "Item Clicked " + String.valueOf(i),Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
     }
@@ -83,6 +99,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView username;
         TextView fullname;
         ImageView avatarThumb;
+        CardView cardview;
 
 
         public MyViewHolder(View itemView) {
@@ -95,6 +112,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             username = (TextView) itemView.findViewById(R.id.username);
             fullname = (TextView) itemView.findViewById(R.id.userFullname);
             avatarThumb = (ImageView) itemView.findViewById(R.id.profile_image);
+            cardview = (CardView) itemView.findViewById(R.id.cardview_repo);
         }
     }
 }
