@@ -1,7 +1,7 @@
 package devarthur.post.gitrepos.model;
 
 /*
-    This model class is responsible for creating a pattern to be used the
+    This model class is responsible for creating a pattern to be used with the
     recycler view adapter.
 
  */
