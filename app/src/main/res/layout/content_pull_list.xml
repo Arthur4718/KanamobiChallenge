@@ -5,16 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:context=".activity.PullListActivity"
+    tools:showIn="@layout/activity_pull_list">
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/myRecyclerView"
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="Pull Request List"
+
+        />
+
 </android.support.constraint.ConstraintLayout>
