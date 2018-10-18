@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity
 
     //Constants
     private static final String GITAPI_URL = "";
-    //TODO check for the correct base URL
+    //TODO check for the correct base URL in the doc, see the resources on trello for more info
 
 
     //TODO create a login to populate recycler view with local data.

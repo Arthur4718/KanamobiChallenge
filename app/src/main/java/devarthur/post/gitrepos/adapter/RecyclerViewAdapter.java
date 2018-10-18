@@ -97,7 +97,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         //Set data to be passed through intent
         Intent intent = new Intent(mContext, RepoPullLIst.class);
-        
+
         mContext.startActivity(intent);
 
 
@@ -118,10 +118,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView fullname;
         ImageView avatarThumb;
         CardView cardview;
-
-        //TODO CREATE A LAYOUT FOR LANDSCAPE MODE WICH ENABLES MORE ESPACE FOR DESCRIPTIONS
-
-
         public MyViewHolder(View itemView) {
             super(itemView);
 
