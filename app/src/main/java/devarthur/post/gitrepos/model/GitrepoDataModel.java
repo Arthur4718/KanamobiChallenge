@@ -5,7 +5,7 @@ package devarthur.post.gitrepos.model;
     recycler view adapter.
 
  */
-public class GitRepo {
+public class GitrepoDataModel {
 
     //Member Variables
     private String repoName;
@@ -16,17 +16,18 @@ public class GitRepo {
     private String fullname;
     private String html_url;
     private String pull_url;
+    private String avatar_url;
     private String languague;
 
     // You can check the JSON object structure at
     // http://www.jsonmate.com/permalink/5bc7b62a85da04b10bcf7bb5
 
-    public GitRepo() {
+    public GitrepoDataModel() {
 
 
     }
 
-    public GitRepo(String repoName, String repoDesc, String forkCount, String starCount, String username, String fullname, String html_url, String pull_url, String languague) {
+    public GitrepoDataModel(String repoName, String repoDesc, String forkCount, String starCount, String username, String fullname, String html_url, String pull_url, String avatar_url, String languague) {
         this.repoName = repoName;
         this.repoDesc = repoDesc;
         this.forkCount = forkCount;
@@ -35,7 +36,16 @@ public class GitRepo {
         this.fullname = fullname;
         this.html_url = html_url;
         this.pull_url = pull_url;
+        this.avatar_url = avatar_url;
         this.languague = languague;
+    }
+
+    public String getAvatar_url() {
+        return avatar_url;
+    }
+
+    public void setAvatar_url(String avatar_url) {
+        this.avatar_url = avatar_url;
     }
 
     public String getRepoName() {
