@@ -26,6 +26,18 @@ public class GitRepo {
 
     }
 
+    public GitRepo(String repoName, String repoDesc, String forkCount, String starCount, String username, String fullname, String html_url, String pull_url, String languague) {
+        this.repoName = repoName;
+        this.repoDesc = repoDesc;
+        this.forkCount = forkCount;
+        this.starCount = starCount;
+        this.username = username;
+        this.fullname = fullname;
+        this.html_url = html_url;
+        this.pull_url = pull_url;
+        this.languague = languague;
+    }
+
     public String getRepoName() {
         return repoName;
     }
