@@ -94,8 +94,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private void OpenPullList(){
         //TODO USE INTENT PUT EXTRA TO PASS INFORMATION TO THE NEXT SCREEN.
-        Intent repoPullLis = new Intent(mContext, RepoPullLIst.class);
-        mContext.startActivity(repoPullLis);
+
+        //Set data to be passed through intent
+        Intent intent = new Intent(mContext, RepoPullLIst.class);
+        
+        mContext.startActivity(intent);
+
+
     }
 
     @Override

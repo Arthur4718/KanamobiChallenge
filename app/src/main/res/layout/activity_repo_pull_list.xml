@@ -6,6 +6,50 @@
     android:layout_height="match_parent"
     tools:context=".activity.RepoPullLIst">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/colorAccent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+
+        <TextView
+            android:id="@+id/pullsOpened"
+            android:layout_marginLeft="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20 opened"
+            android:textStyle="bold"
+            android:textSize="16dp"
+            android:textColor="@android:color/white"
+            />
+        <TextView
+
+            android:layout_marginLeft="6dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/"
+            android:textStyle="bold"
+            android:textSize="16dp"
+            android:textColor="@android:color/white"
+            />
+
+        <TextView
+            android:id="@+id/pullsClosed"
+            android:layout_marginLeft="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="700 closed"
+            android:textSize="16dp"
+            android:textColor="@android:color/white"
+            />
+
+
+
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -22,11 +66,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="457dp"
-        tools:layout_editor_absoluteY="466dp" />
 </android.support.constraint.ConstraintLayout>
