@@ -2,14 +2,15 @@ package devarthur.post.gitrepos.adapter;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -18,6 +19,7 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
+import devarthur.post.gitrepos.activity.RepoPullLIst;
 import devarthur.post.gitrepos.model.GitrepoDataModel;
 import devarthur.post.gitrepos.R;
 
@@ -74,15 +76,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO pass the repo url, pull url and other information though intent for the next screen./
+                //TODO USE INTENT PUT EXTRA TO PASS INFORMATION TO THE NEXT SCREEN.
 
+                Intent repoPullLis = new Intent(mContext, RepoPullLIst.class);
+                mContext.startActivity(repoPullLis);
 
-                //Debug
-                Toast.makeText(mContext, "Item Clicked " + String.valueOf(i),Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 
     @Override
@@ -100,6 +100,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView fullname;
         ImageView avatarThumb;
         CardView cardview;
+
+        //TODO CREATE A LAYOUT FOR LANDSCAPE MODE WICH ENABLES MORE ESPACE FOR DESCRIPTIONS
 
 
         public MyViewHolder(View itemView) {
