@@ -65,7 +65,7 @@ public class PullViewAdapter extends RecyclerView.Adapter<PullViewAdapter.PullVi
 
         holder.pullUserName_tv.setText(mData.get(i).getPullUsername());
         holder.pullFullname.setText(mData.get(i).getPullFullname());
-        
+
         //Sets an onclick listener to every cardview
         // Also adds the listener to the description
 
@@ -114,7 +114,7 @@ public class PullViewAdapter extends RecyclerView.Adapter<PullViewAdapter.PullVi
             pullRequest_tv = (TextView) itemView.findViewById(R.id.pullRequestText);
             pullDesc_tv = (TextView) itemView.findViewById(R.id.pullRequestDesc);
             pullUserThumb = (ImageView) itemView.findViewById(R.id.pullUserThumb);
-            pullUserName_tv = (TextView) itemView.findViewById(R.id.username);
+            pullUserName_tv = (TextView) itemView.findViewById(R.id.pullUsername);
             pullFullname = (TextView) itemView.findViewById(R.id.pullFullName);
             pullItemCardview = (CardView) itemView.findViewById(R.id.cardview_pull);
 
