@@ -46,6 +46,7 @@ public class RepoPullLIst extends AppCompatActivity {
             pullItem.setPullAvatarUrl("https://s.gravatar.com/avatar/398bcf1fa067a7056950d4124b4c9124?s=80");
             pullItem.setPullUsername("username: " + String.valueOf(i));
             pullItem.setPullFullname("full name user: " + String.valueOf(i));
+            pullItem.setPullURL("https://github.com/Arthur4718");
             PullDataList.add(pullItem);
         }
 

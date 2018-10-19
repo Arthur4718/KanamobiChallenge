@@ -2,6 +2,8 @@ package devarthur.post.gitrepos.adapter;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -51,7 +53,7 @@ public class PullViewAdapter extends RecyclerView.Adapter<PullViewAdapter.PullVi
     }
 
     @Override
-    public void onBindViewHolder(PullViewHolder holder, final int i) {
+    public void onBindViewHolder(final PullViewHolder holder, final int i) {
 
 
         holder.pullRequest_tv.setText(mData.get(i).getPullTitle());
@@ -73,7 +75,8 @@ public class PullViewAdapter extends RecyclerView.Adapter<PullViewAdapter.PullVi
             @Override
             public void onClick(View v) {
 
-                OpenPullInBrowser();
+                String url = mData.get(i).getPullURL();
+                OpenPullInBrowser(url);
 
             }
         });
@@ -81,16 +84,19 @@ public class PullViewAdapter extends RecyclerView.Adapter<PullViewAdapter.PullVi
         holder.pullDesc_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OpenPullInBrowser();
+
+                String url = mData.get(i).getPullURL();
+                OpenPullInBrowser(url);
+
             }
         });
     }
 
-    private void OpenPullInBrowser(){
-       //TODO read the pull url and open it in the browser, check the data model to see if holds the pull url.
+    private void OpenPullInBrowser(String url){
 
-        Toast.makeText(mContext, "Item Clicked", Toast.LENGTH_SHORT).show();
 
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        mContext.startActivity(browserIntent);
 
     }
 
