@@ -1,6 +1,6 @@
 package devarthur.post.gitrepos.api;
 
-import devarthur.post.gitrepos.ItemResponse;
+import devarthur.post.gitrepos.model.ItemResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 

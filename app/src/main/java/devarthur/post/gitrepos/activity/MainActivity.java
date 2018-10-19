@@ -1,4 +1,4 @@
-package devarthur.post.gitrepos;
+package devarthur.post.gitrepos.activity;
 
 
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import devarthur.post.gitrepos.model.ItemResponse;
+import devarthur.post.gitrepos.R;
 import devarthur.post.gitrepos.adapter.RecyclerViewAdapter;
 import devarthur.post.gitrepos.api.Client;
 import devarthur.post.gitrepos.api.Service;
@@ -63,20 +66,22 @@ public class MainActivity extends AppCompatActivity
 
         //Holds all data models in a Array List
         GitRepoList = new ArrayList<>();
-        populateRecyclerView();
+
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeCointainer);
         swipeContainer.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+
 
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
-
+               // progressBar = (ProgressBar) findViewById(R.id.progressBar);
                 Toast.makeText(getApplicationContext(), "Resolving new Repos",Toast.LENGTH_SHORT ).show();
                  //FOR DEBUG ONLY
                 //populateRecyclerView();
+               // progressBar.setVisibility(View.VISIBLE);
                 loadJson();
 
 
@@ -89,65 +94,47 @@ public class MainActivity extends AppCompatActivity
 
     private void loadJson(){
 
-        TextView disconnected = (TextView) findViewById(R.id.disconeccted);
-
-        Client Client = new Client();
-
-        Service apiService = Client.getClient().create(Service.class);
-        Call<ItemResponse> call = apiService.getItems();
-        call.enqueue(new Callback<ItemResponse>() {
-            @Override
-            public void onResponse(Call<ItemResponse> call, Response<ItemResponse> response) {
-                //mRecyclerView.setAdapter(new RecyclerViewAdapter());
-            }
-
-            @Override
-            public void onFailure(Call<ItemResponse> call, Throwable t) {
-
-            }
-        });
-
-    }
+        final TextView disconnected = (TextView) findViewById(R.id.disconeccted);
 
 
 
+        try {
 
-    private void populateRecyclerView(){
-        //TODO remove after setting up the GET method from GIT hub API.
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+            Client Client = new Client();
+            Service apiService = Client.getClient().create(Service.class);
+            Call<ItemResponse> call = apiService.getItems();
+            call.enqueue(new Callback<ItemResponse>() {
+                @Override
+                public void onResponse(Call<ItemResponse> call, Response<ItemResponse> response) {
 
-        progressBar.setVisibility(View.VISIBLE);
+                    List<ItemDataModel> items = response.body().getItems();
+                   // mRecyclerView.setAdapter(new ItemAdapter(getApplicationContext(), mdata));
+                    mRecyclerView.setAdapter(new RecyclerViewAdapter(getApplicationContext(), GitRepoList));
+                    mRecyclerView.smoothScrollToPosition(0);
+                    //progressBar.setVisibility(View.INVISIBLE);
 
-        for(int i = 0; i < totalRepos; i++){
 
-            ItemDataModel gitItem = new ItemDataModel();
-            gitItem.setRepoName("Repo: " + String.valueOf(i));
-            gitItem.setRepoDesc("Description: " + String.valueOf(i));
-            gitItem.setForkCount("forkCount: " + String.valueOf(i * 10));
-            gitItem.setStarCount("starCount: " + String.valueOf(i * 10));
-            gitItem.setUsername("Username: " + String.valueOf(i));
-            gitItem.setFullname("fullname" + String.valueOf(i));
-            gitItem.setHtml_url("https://github.com/Arthur4718");
-            gitItem.setPull_url("https://github.com/Arthur4718");
-            gitItem.setAvatar_url("https://s.gravatar.com/avatar/398bcf1fa067a7056950d4124b4c9124?s=80");
-            gitItem.setLanguague("Java");
-            GitRepoList.add(gitItem);
+                }
+
+                @Override
+                public void onFailure(Call<ItemResponse> call, Throwable t) {
+                    Log.d("App", "On Failure " + t.toString());
+                    Toast.makeText(getApplicationContext(), "Error Fetching Data!", Toast.LENGTH_SHORT).show();
+                    disconnected.setVisibility(View.VISIBLE);
+                    //progressBar.setVisibility(View.INVISIBLE);
+
+
+                }
+            });
+
+        }catch (Exception e ){
+            Log.d("App", e.getMessage());
+            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
 
         }
-        totalRepos = totalRepos + 10;
-        //Used to test the recycler while there is not connection to the api.
 
-        feedRecyclerView(GitRepoList);
-        progressBar.setVisibility(View.INVISIBLE);
 
     }
-
-    private void feedRecyclerView(List<ItemDataModel>  dataList) {
-        RecyclerViewAdapter myRecyclerViewAdapter = new RecyclerViewAdapter(getApplicationContext(), dataList);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        mRecyclerView.setAdapter(myRecyclerViewAdapter);
-    }
-
 
 
     @Override
