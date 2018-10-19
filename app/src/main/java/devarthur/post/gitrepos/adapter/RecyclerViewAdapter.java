@@ -2,8 +2,10 @@ package devarthur.post.gitrepos.adapter;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
+import devarthur.post.gitrepos.activity.RepoPullLIst;
 import devarthur.post.gitrepos.model.GitrepoDataModel;
 import devarthur.post.gitrepos.R;
 
@@ -69,18 +72,33 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .into(holder.avatarThumb);
 
 
-        //Sets an onclick listener to every cardview.
+        //Sets an onclick listener to every cardview
+        // Also adds the listener to the description
 
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO pass the repo url, pull url and other information though intent for the next screen./
 
+                OpenPullList();
 
-                //Debug
-                Toast.makeText(mContext, "Item Clicked " + String.valueOf(i),Toast.LENGTH_SHORT).show();
             }
         });
+
+        holder.repoDesc_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OpenPullList();
+            }
+        });
+    }
+
+    private void OpenPullList(){
+        //TODO USE INTENT PUT EXTRA TO PASS INFORMATION TO THE NEXT SCREEN.
+
+        //Set data to be passed through intent
+        Intent intent = new Intent(mContext, RepoPullLIst.class);
+
+        mContext.startActivity(intent);
 
 
     }
@@ -100,8 +118,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView fullname;
         ImageView avatarThumb;
         CardView cardview;
-
-
         public MyViewHolder(View itemView) {
             super(itemView);
 

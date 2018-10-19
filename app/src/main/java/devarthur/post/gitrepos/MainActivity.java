@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity
 
     //Constants
     private static final String GITAPI_URL = "";
-    //TODO check for the correct base URL
+    //TODO check for the correct base URL in the doc, see the resources on trello for more info
 
 
     //TODO create a login to populate recycler view with local data.
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity
             gitItem.setFullname("fullname" + String.valueOf(i));
             gitItem.setHtml_url("https://github.com/Arthur4718");
             gitItem.setPull_url("https://github.com/Arthur4718");
-            gitItem.setAvatar_url("https://github.com/Arthur4718");
+            gitItem.setAvatar_url("https://s.gravatar.com/avatar/398bcf1fa067a7056950d4124b4c9124?s=80");
             gitItem.setLanguague("Java");
             GitRepoList.add(gitItem);
 
