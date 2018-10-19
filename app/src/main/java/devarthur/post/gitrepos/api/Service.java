@@ -1,4 +1,11 @@
 package devarthur.post.gitrepos.api;
 
-public class Service {
+import devarthur.post.gitrepos.ItemResponse;
+import retrofit2.Call;
+import retrofit2.http.GET;
+
+public interface Service {
+
+    @GET("/search/repositories?q=language:Java&sort=stars&page=1")
+    Call<ItemResponse> getItems();
 }
