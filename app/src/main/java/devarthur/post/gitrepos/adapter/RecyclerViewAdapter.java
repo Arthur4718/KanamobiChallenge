@@ -5,13 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -21,18 +19,18 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 import devarthur.post.gitrepos.activity.RepoPullLIst;
-import devarthur.post.gitrepos.model.GitrepoDataModel;
+import devarthur.post.gitrepos.model.ItemDataModel;
 import devarthur.post.gitrepos.R;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
 
     //Member variables
     private Context mContext;
-    private List<GitrepoDataModel> mData;
+    private List<ItemDataModel> mData;
     private RequestOptions requestOptions;
 
 
-    public RecyclerViewAdapter(Context mContext, List<GitrepoDataModel> mData) {
+    public RecyclerViewAdapter(Context mContext, List<ItemDataModel> mData) {
         this.mContext = mContext;
         this.mData = mData;
 
@@ -93,7 +91,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     private void OpenPullList(){
-        //TODO USE INTENT PUT EXTRA TO PASS INFORMATION TO THE NEXT SCREEN.
+
 
         //Set data to be passed through intent
         Intent intent = new Intent(mContext, RepoPullLIst.class);

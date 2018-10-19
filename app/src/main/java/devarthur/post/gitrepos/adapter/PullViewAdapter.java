@@ -96,8 +96,10 @@ public class PullViewAdapter extends RecyclerView.Adapter<PullViewAdapter.PullVi
 
 
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        mContext.startActivity(browserIntent);
 
+        if (browserIntent.resolveActivity(mContext.getPackageManager()) != null) {
+            mContext.startActivity(browserIntent);
+        }
     }
 
     @Override

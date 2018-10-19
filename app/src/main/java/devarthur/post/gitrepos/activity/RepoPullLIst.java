@@ -33,10 +33,6 @@ public class RepoPullLIst extends AppCompatActivity {
          populateRecyclerView();
     }
 
-    private void getDataFromNetwork(){
-        //TODO create a JSON request to consume the GIT API and populate te recycler view
-    }
-
     private void populateRecyclerView() {
 
         for(int i=0; i < 10;i++){

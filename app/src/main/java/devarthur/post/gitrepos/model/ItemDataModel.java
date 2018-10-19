@@ -1,33 +1,54 @@
 package devarthur.post.gitrepos.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /*
     This model class is responsible for creating a pattern to be used with the
     recycler view adapter.
 
  */
-public class GitrepoDataModel {
+public class ItemDataModel {
 
     //Member Variables
+    @SerializedName("name")
+    @Expose
     private String repoName;
+    @SerializedName("description")
+    @Expose
     private String repoDesc;
+    @SerializedName("forks_count")
+    @Expose
     private String forkCount;
+    @SerializedName("stargazers_count")
+    @Expose
     private String starCount;
+    @SerializedName("full_name")
+    @Expose
     private String username;
+    @SerializedName("full_name")
+    @Expose
     private String fullname;
+    @SerializedName("html_url")
+    @Expose
     private String html_url;
+    @SerializedName("pulls_url")
+    @Expose
     private String pull_url;
     private String avatar_url;
+    @SerializedName("language")
+    @Expose
     private String languague;
 
     // You can check the JSON object structure at
     // http://www.jsonmate.com/permalink/5bc7b62a85da04b10bcf7bb5
 
-    public GitrepoDataModel() {
+    public ItemDataModel() {
 
 
     }
 
-    public GitrepoDataModel(String repoName, String repoDesc, String forkCount, String starCount, String username, String fullname, String html_url, String pull_url, String avatar_url, String languague) {
+    public ItemDataModel(String repoName, String repoDesc, String forkCount, String starCount, String username, String fullname, String html_url, String pull_url, String avatar_url, String languague) {
         this.repoName = repoName;
         this.repoDesc = repoDesc;
         this.forkCount = forkCount;

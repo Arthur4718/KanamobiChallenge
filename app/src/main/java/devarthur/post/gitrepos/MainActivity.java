@@ -1,42 +1,46 @@
 package devarthur.post.gitrepos;
 
+
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import devarthur.post.gitrepos.adapter.RecyclerViewAdapter;
-import devarthur.post.gitrepos.model.GitrepoDataModel;
+import devarthur.post.gitrepos.api.Client;
+import devarthur.post.gitrepos.api.Service;
+import devarthur.post.gitrepos.model.ItemDataModel;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     //Member Variables.
-    private List<GitrepoDataModel> GitRepoList;
+    private List<ItemDataModel> GitRepoList;
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter myRecyclerViewAdapter;
-
-    //Constants
-    private static final String GITAPI_URL = "";
-    //TODO check for the correct base URL in the doc, see the resources on trello for more info
-
-
-    //TODO create a login to populate recycler view with local data.
-
-
-    //TODO create a logic to populate the recycler view with data from GIT API
+    private SwipeRefreshLayout swipeContainer;
+    private ProgressBar progressBar;
+    private int totalRepos = 10; // DEBUG
+    private TextView disconnected;
 
 
     @Override
@@ -61,22 +65,62 @@ public class MainActivity extends AppCompatActivity
         GitRepoList = new ArrayList<>();
         populateRecyclerView();
 
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeCointainer);
+        swipeContainer.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+
+                Toast.makeText(getApplicationContext(), "Resolving new Repos",Toast.LENGTH_SHORT ).show();
+                 //FOR DEBUG ONLY
+                //populateRecyclerView();
+                loadJson();
+
+
+            }
+        });
+
+
 
     }
 
-    private void getDataFromNetWork(){
+    private void loadJson(){
 
-        //TODO Use the design pattern from this https://www.youtube.com/watch?v=nqty1cT69yk
+        TextView disconnected = (TextView) findViewById(R.id.disconeccted);
 
+        Client Client = new Client();
+
+        Service apiService = Client.getClient().create(Service.class);
+        Call<ItemResponse> call = apiService.getItems();
+        call.enqueue(new Callback<ItemResponse>() {
+            @Override
+            public void onResponse(Call<ItemResponse> call, Response<ItemResponse> response) {
+                //mRecyclerView.setAdapter(new RecyclerViewAdapter());
+            }
+
+            @Override
+            public void onFailure(Call<ItemResponse> call, Throwable t) {
+
+            }
+        });
 
     }
+
+
+
 
     private void populateRecyclerView(){
         //TODO remove after setting up the GET method from GIT hub API.
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        for(int i = 0; i < 10; i++){
+        progressBar.setVisibility(View.VISIBLE);
 
-            GitrepoDataModel gitItem = new GitrepoDataModel();
+        for(int i = 0; i < totalRepos; i++){
+
+            ItemDataModel gitItem = new ItemDataModel();
             gitItem.setRepoName("Repo: " + String.valueOf(i));
             gitItem.setRepoDesc("Description: " + String.valueOf(i));
             gitItem.setForkCount("forkCount: " + String.valueOf(i * 10));
@@ -90,13 +134,15 @@ public class MainActivity extends AppCompatActivity
             GitRepoList.add(gitItem);
 
         }
+        totalRepos = totalRepos + 10;
         //Used to test the recycler while there is not connection to the api.
 
         feedRecyclerView(GitRepoList);
+        progressBar.setVisibility(View.INVISIBLE);
 
     }
 
-    private void feedRecyclerView(List<GitrepoDataModel>  dataList) {
+    private void feedRecyclerView(List<ItemDataModel>  dataList) {
         RecyclerViewAdapter myRecyclerViewAdapter = new RecyclerViewAdapter(getApplicationContext(), dataList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mRecyclerView.setAdapter(myRecyclerViewAdapter);
