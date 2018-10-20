@@ -1,4 +1,4 @@
-package devarthur.post.gitrepos;
+package devarthur.post.gitrepos.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -12,10 +12,19 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.msebera.android.httpclient.Header;
+import devarthur.post.gitrepos.R;
 import devarthur.post.gitrepos.adapter.RecyclerViewAdapter;
 import devarthur.post.gitrepos.model.GitrepoDataModel;
 
@@ -29,7 +38,7 @@ public class MainActivity extends AppCompatActivity
     private RecyclerViewAdapter myRecyclerViewAdapter;
 
     //Constants
-    private static final String GITAPI_URL = "";
+    private static final String GITAPI_URL = "https://api.github.com/search/repositories?q=language:Java&sort=stars&page=1";
     //TODO check for the correct base URL in the doc, see the resources on trello for more info
 
 
@@ -69,6 +78,39 @@ public class MainActivity extends AppCompatActivity
         //TODO Use the design pattern from this https://www.youtube.com/watch?v=nqty1cT69yk
 
 
+    }
+
+    private void attempPost() {
+
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        JSONObject jsonParams = new JSONObject();
+
+        client.addHeader("-H", "application/vnd.github.v3+json");
+
+
+
+        client.post(getApplicationContext(), GITAPI_URL, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+
+                Log.d("App", "Successs");
+                Toast.makeText(getApplicationContext(), "Request Successs", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+
+
+
+            }
+            @Override
+            public void onProgress(long bytesWritten, long totalSize) {
+                super.onProgress(bytesWritten, totalSize);
+            }
+        });
     }
 
     private void populateRecyclerView(){
