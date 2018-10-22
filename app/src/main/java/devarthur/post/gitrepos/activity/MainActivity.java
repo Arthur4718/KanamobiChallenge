@@ -15,7 +15,9 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +25,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.msebera.android.httpclient.Header;
+
+import cz.msebera.android.httpclient.entity.mime.Header;
 import devarthur.post.gitrepos.R;
 import devarthur.post.gitrepos.adapter.RecyclerViewAdapter;
 import devarthur.post.gitrepos.model.GitrepoDataModel;
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity
 
     //Constants
     private static final String GITAPI_URL = "https://api.github.com/search/repositories?q=language:Java&sort=stars&page=1";
+
     //TODO check for the correct base URL in the doc, see the resources on trello for more info
 
 
@@ -68,49 +72,47 @@ public class MainActivity extends AppCompatActivity
 
         //Holds all data models in a Array List
         GitRepoList = new ArrayList<>();
-        populateRecyclerView();
+        //populateRecyclerView();
 
 
     }
 
-    private void getDataFromNetWork(){
 
+    private void attemptGet() {
         //TODO Use the design pattern from this https://www.youtube.com/watch?v=nqty1cT69yk
 
+        final AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        client.addHeader("Accept:", "application/vnd.github.v3+json");
 
-    }
+        params.put("-u","Arthur4718");
 
-    private void attempPost() {
-
-
-        AsyncHttpClient client = new AsyncHttpClient();
-        JSONObject jsonParams = new JSONObject();
-
-        client.addHeader("-H", "application/vnd.github.v3+json");
-
-
-
-        client.post(getApplicationContext(), GITAPI_URL, new JsonHttpResponseHandler() {
+        client.post("https://api.github.com", params,  new AsyncHttpResponseHandler() {
 
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-
-                Log.d("App", "Successs");
-                Toast.makeText(getApplicationContext(), "Request Successs", Toast.LENGTH_SHORT).show();
+            public void onStart() {
+                // called before request is started
             }
+
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-
-
-
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                Toast.makeText(getApplicationContext(), "Request Successs!", Toast.LENGTH_SHORT).show();
+                Log.d("GET", "object: " + responseBody.toString());
             }
+
             @Override
-            public void onProgress(long bytesWritten, long totalSize) {
-                super.onProgress(bytesWritten, totalSize);
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(getApplicationContext(), "Request Failure: " +  String.valueOf(statusCode), Toast.LENGTH_SHORT).show();
+                Log.d("GET", "Failure");
+            }
+
+
+            public void onRetry(int retryNo) {
+                // called when request is retried
             }
         });
+
+
     }
 
     private void populateRecyclerView(){
@@ -186,6 +188,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             //TODO Create new item navigations
+            attemptGet();
 
         } else if (id == R.id.nav_gallery) {
 
@@ -196,6 +199,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
+            populateRecyclerView();
 
         }
 
