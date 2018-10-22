@@ -8,9 +8,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,9 +28,7 @@ import devarthur.post.gitrepos.adapter.RecyclerViewAdapter;
 import devarthur.post.gitrepos.api.Client;
 import devarthur.post.gitrepos.api.Service;
 import devarthur.post.gitrepos.model.ItemDataModel;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 
 
 public class MainActivity extends AppCompatActivity
@@ -98,40 +96,6 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        try {
-
-            Client Client = new Client();
-            Service apiService = Client.getClient().create(Service.class);
-            Call<ItemResponse> call = apiService.getItems();
-            call.enqueue(new Callback<ItemResponse>() {
-                @Override
-                public void onResponse(Call<ItemResponse> call, Response<ItemResponse> response) {
-
-                    List<ItemDataModel> items = response.body().getItems();
-                   // mRecyclerView.setAdapter(new ItemAdapter(getApplicationContext(), mdata));
-                    mRecyclerView.setAdapter(new RecyclerViewAdapter(getApplicationContext(), GitRepoList));
-                    mRecyclerView.smoothScrollToPosition(0);
-                    //progressBar.setVisibility(View.INVISIBLE);
-
-
-                }
-
-                @Override
-                public void onFailure(Call<ItemResponse> call, Throwable t) {
-                    Log.d("App", "On Failure " + t.toString());
-                    Toast.makeText(getApplicationContext(), "Error Fetching Data!", Toast.LENGTH_SHORT).show();
-                    disconnected.setVisibility(View.VISIBLE);
-                    //progressBar.setVisibility(View.INVISIBLE);
-
-
-                }
-            });
-
-        }catch (Exception e ){
-            Log.d("App", e.getMessage());
-            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-
-        }
 
 
     }
