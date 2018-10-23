@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +16,16 @@ import devarthur.post.gitrepos.model.PullDataModel;
 public class RepoPullLIst extends AppCompatActivity {
 
     //Member Variables
-
     private List<PullDataModel> PullDataList;
     private RecyclerView mRecyclerView;
     private PullViewAdapter myRecyclerViewAdapter;
     private String text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent at ultrices turpis. Vivamus molestie faucibus velit, a lobortis enim accumsan a. Curabitur facilisis cursus rutrum";
+    private String pullListURL;
+
+    //Constants
+    private static String BASE_URL = "https://api.github.com/repos/";
+    //https://api.github.com/repos/
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +37,23 @@ public class RepoPullLIst extends AppCompatActivity {
         //Holds all data models in a Array List
          PullDataList = new ArrayList<>();
          populateRecyclerView();
+
+
+         //Set repo name in the title
+         String repo = getIntent().getExtras().getString("RepoName");
+         getSupportActionBar().setTitle(repo);
+
+         //Set user name =
+         String username = getIntent().getExtras().getString("Owner");
+
+         //Create the url to list the pull requests
+         pullListURL = BASE_URL + username + "/" + repo;
+         //Log.d("APP", "URL " + BASE_URL + username + "/" + repo);
+
+        getDataFromNetwork();
     }
+
+
 
     private void getDataFromNetwork(){
         //TODO create a JSON request to consume the GIT API and populate te recycler view

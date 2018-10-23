@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity
                     GitrepoDataModel gitItem = new GitrepoDataModel();
 
                     try {
-                        gitItem.setRepoName(response.getJSONArray("items").getJSONObject(i).getString("name") + " "+ "n: " +  String.valueOf(i));
+                        gitItem.setRepoName(response.getJSONArray("items").getJSONObject(i).getString("name"));
                         gitItem.setRepoDesc(response.getJSONArray("items").getJSONObject(i).getString("description"));
                         gitItem.setForkCount(response.getJSONArray("items").getJSONObject(i).getString("forks"));
                         gitItem.setStarCount(response.getJSONArray("items").getJSONObject(i).getString("stargazers_count"));
@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

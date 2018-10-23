@@ -55,19 +55,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int i) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
 
 
-        holder.repoName_tv.setText(mData.get(i).getRepoName());
-        holder.repoDesc_tv.setText(mData.get(i).getRepoDesc());
-        holder.forkCount_tv.setText(mData.get(i).getForkCount());
-        holder.starCount_tv.setText(mData.get(i).getStarCount());
-        holder.username.setText(mData.get(i).getUsername());
-        holder.fullname.setText(mData.get(i).getFullname());
+        holder.repoName_tv.setText(mData.get(position).getRepoName());
+        holder.repoDesc_tv.setText(mData.get(position).getRepoDesc());
+        holder.forkCount_tv.setText(mData.get(position).getForkCount());
+        holder.starCount_tv.setText(mData.get(position).getStarCount());
+        holder.username.setText(mData.get(position).getUsername());
+        holder.fullname.setText(mData.get(position).getFullname());
 
         Glide
                 .with(mContext)
-                .load(mData.get(i).getAvatar_url())
+                .load(mData.get(position).getAvatar_url())
                 .apply(requestOptions)
                 .into(holder.avatarThumb);
 
@@ -79,7 +79,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
 
-                OpenPullList();
+                OpenPullList(mData, position);
 
             }
         });
@@ -87,16 +87,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.repoDesc_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OpenPullList();
+                OpenPullList(mData, position);
             }
-        });
+    });
     }
 
-    private void OpenPullList(){
+    private void OpenPullList(List<GitrepoDataModel> data , int position){
         //TODO USE INTENT PUT EXTRA TO PASS INFORMATION TO THE NEXT SCREEN.
 
         //Set data to be passed through intent
         Intent intent = new Intent(mContext, RepoPullLIst.class);
+        //Name of the repo
+        intent.putExtra("RepoName", mData.get(position).getRepoName());
+        //Owner
+        intent.putExtra("Owner", mData.get(position).getUsername());
 
         mContext.startActivity(intent);
 
