@@ -94,7 +94,7 @@
         <TextView
             android:id="@+id/username"
             android:layout_width="wrap_content"
-            android:layout_height="15dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:layout_marginLeft="2dp"
             android:layout_marginTop="8dp"
@@ -102,6 +102,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:inputType="text"
+
             android:text="Username"
             android:textAlignment="center"
             android:textColor="@android:color/black"
@@ -124,7 +125,8 @@
             android:textAlignment="viewEnd"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/repoStarCount" />
+            app:layout_constraintStart_toEndOf="@+id/repoStarCount"
+            android:gravity="end" />
 
     </android.support.constraint.ConstraintLayout>
 

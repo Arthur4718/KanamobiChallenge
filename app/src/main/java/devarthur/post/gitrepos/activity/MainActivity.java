@@ -2,6 +2,7 @@ package devarthur.post.gitrepos.activity;
 
 import android.os.Bundle;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,6 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -44,12 +47,14 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter myRecyclerViewAdapter;
     private SwipeRefreshLayout swipeContainer;
+    private ProgressBar progressBar;
     private int datalenght;
     private int page;
+    private boolean isListBottom;
 
     //Constants
     //TODO create a class to handle the GET request and remove the code from this activity.
-    private static final String GITAPI_URL = "https://api.github.com/search/repositories?q=language:Java&sort=stars&page=1";
+    private static final String GITAPI_URL = "https://api.github.com/search/repositories?q=language:Java&sort=stars&page=";
 
 
     @Override
@@ -70,6 +75,21 @@ public class MainActivity extends AppCompatActivity
 
         mRecyclerView = findViewById(R.id.myRecyclerView);
         GitRepoList = new ArrayList<>();
+        page = 1; // TODO Override the method on resume on this activity and store the state of the list
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (!recyclerView.canScrollVertically(1)) {
+                     Toast.makeText(getApplicationContext(), "List Updated...", Toast.LENGTH_LONG).show();
+                    progressBar = (ProgressBar) findViewById(R.id.progressBar);
+                    progressBar.setVisibility(View.VISIBLE);
+                    isListBottom = true;
+                    getDataFromGit();
+
+                }
+            }
+        });
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         swipeContainer.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
@@ -78,16 +98,22 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onRefresh() {
 
-                // progressBar = (ProgressBar) findViewById(R.id.progressBar);
-                Toast.makeText(getApplicationContext(), "Resolving new Repos",Toast.LENGTH_SHORT ).show();
-                //FOR DEBUG ONLY
-                //populateRecyclerView();
-                // progressBar.setVisibility(View.VISIBLE);
+
+                Toast.makeText(getApplicationContext(), "Resolving new Repos from page: " + String.valueOf(page),Toast.LENGTH_SHORT ).show();
+                progressBar = (ProgressBar) findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.VISIBLE);
+                swipeContainer.setRefreshing(false);
                 getDataFromGit();
 
 
             }
         });
+
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+        getDataFromGit();
+
     }
 
 
@@ -99,8 +125,9 @@ public class MainActivity extends AppCompatActivity
 
 
         client.addHeader("User-Agent", "android4718");
+        String URL = GITAPI_URL + String.valueOf(page);
 
-        client.get(getApplicationContext(), GITAPI_URL,params,  new JsonHttpResponseHandler() {
+        client.get(getApplicationContext(), URL,params,  new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
@@ -111,8 +138,9 @@ public class MainActivity extends AppCompatActivity
 
                 for(int i = 0; i < datalenght; i++){
                     GitrepoDataModel gitItem = new GitrepoDataModel();
+
                     try {
-                        gitItem.setRepoName(response.getJSONArray("items").getJSONObject(i).getString("name"));
+                        gitItem.setRepoName(response.getJSONArray("items").getJSONObject(i).getString("name") + " "+ "n: " +  String.valueOf(i));
                         gitItem.setRepoDesc(response.getJSONArray("items").getJSONObject(i).getString("description"));
                         gitItem.setForkCount(response.getJSONArray("items").getJSONObject(i).getString("forks"));
                         gitItem.setStarCount(response.getJSONArray("items").getJSONObject(i).getString("stargazers_count"));
@@ -126,11 +154,21 @@ public class MainActivity extends AppCompatActivity
                         GitRepoList.add(gitItem);
                         feedRecyclerView(GitRepoList);
 
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+
+                if (isListBottom){
+                    mRecyclerView.smoothScrollToPosition(GitRepoList.size());
+                    isListBottom = false;
+                }
+
+                progressBar = (ProgressBar) findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.INVISIBLE);
                 swipeContainer.setRefreshing(false);
+                page = page + 1;
 
             }
 
@@ -190,15 +228,20 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        //TODO use the drawer to show the user how many repos you are listing now
+
         if (id == R.id.nav_camera) {
-            //TODO Create new item navigations
+            //TODO Create new item navigations - GO TO THE TOP OF THE LIST
 
 
         } else if (id == R.id.nav_gallery) {
+            //TODO GO TO THE BOTTOM OF THE LIST
 
         } else if (id == R.id.nav_slideshow) {
+            //TODO INFORMATION ABOUT THE APP
 
         } else if (id == R.id.nav_manage) {
+            //
 
         } else if (id == R.id.nav_share) {
 
