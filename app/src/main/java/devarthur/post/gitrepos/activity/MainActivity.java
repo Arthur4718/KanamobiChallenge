@@ -1,6 +1,7 @@
-package devarthur.post.gitrepos;
+package devarthur.post.gitrepos.activity;
 
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,10 +13,27 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.ref.ReferenceQueue;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.entity.ByteArrayEntity;
+import cz.msebera.android.httpclient.entity.ContentType;
+import devarthur.post.gitrepos.R;
 import devarthur.post.gitrepos.adapter.RecyclerViewAdapter;
 import devarthur.post.gitrepos.model.GitrepoDataModel;
 
@@ -27,9 +45,11 @@ public class MainActivity extends AppCompatActivity
     private List<GitrepoDataModel> GitRepoList;
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter myRecyclerViewAdapter;
+    private int datalenght;
 
     //Constants
-    private static final String GITAPI_URL = "";
+    private static final String GITAPI_URL = "https://api.github.com/search/repositories?q=language:Java&sort=stars&page=1";
+
     //TODO check for the correct base URL in the doc, see the resources on trello for more info
 
 
@@ -56,45 +76,60 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         mRecyclerView = findViewById(R.id.myRecyclerView);
-
-        //Holds all data models in a Array List
         GitRepoList = new ArrayList<>();
-        populateRecyclerView();
-
-
     }
 
-    private void getDataFromNetWork(){
 
-        //TODO Use the design pattern from this https://www.youtube.com/watch?v=nqty1cT69yk
+    private void getDataFromGit() {
 
 
+        final AsyncHttpClient client = new AsyncHttpClient();
+        final RequestParams params = new RequestParams();
+
+
+        client.addHeader("User-Agent", "android4718");
+
+        client.get(getApplicationContext(), GITAPI_URL,params,  new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    datalenght = response.getJSONArray("items").length();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                for(int i = 0; i < datalenght; i++){
+                    GitrepoDataModel gitItem = new GitrepoDataModel();
+                    try {
+                        gitItem.setRepoName(response.getJSONArray("items").getJSONObject(i).getString("name"));
+                        gitItem.setRepoDesc(response.getJSONArray("items").getJSONObject(i).getString("description"));
+                        gitItem.setForkCount(response.getJSONArray("items").getJSONObject(i).getString("forks"));
+                        gitItem.setStarCount(response.getJSONArray("items").getJSONObject(i).getString("stargazers_count"));
+                        gitItem.setUsername(response.getJSONArray("items").getJSONObject(i).getJSONObject("owner").getString("login"));
+                        gitItem.setFullname(response.getJSONArray("items").getJSONObject(i).getString("full_name"));
+                        gitItem.setHtml_url(response.getJSONArray("items").getJSONObject(i).getString("html_url"));
+                        gitItem.setPull_url(response.getJSONArray("items").getJSONObject(i).getString("pulls_url"));
+                        gitItem.setAvatar_url(response.getJSONArray("items").getJSONObject(i).getJSONObject("owner").getString("avatar_url"));
+                        gitItem.setLanguague("Java");
+
+                        GitRepoList.add(gitItem);
+                        feedRecyclerView(GitRepoList);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Toast.makeText(getApplicationContext(), "On Failure:  " + String.valueOf(statusCode) + " " + throwable.toString(), Toast.LENGTH_SHORT).show();
+                Log.e("GET", "On error " + throwable.toString());
+            }
+        });
     }
 
-    private void populateRecyclerView(){
-        //TODO remove after setting up the GET method from GIT hub API.
 
-        for(int i = 0; i < 10; i++){
-
-            GitrepoDataModel gitItem = new GitrepoDataModel();
-            gitItem.setRepoName("Repo: " + String.valueOf(i));
-            gitItem.setRepoDesc("Description: " + String.valueOf(i));
-            gitItem.setForkCount("forkCount: " + String.valueOf(i * 10));
-            gitItem.setStarCount("starCount: " + String.valueOf(i * 10));
-            gitItem.setUsername("Username: " + String.valueOf(i));
-            gitItem.setFullname("fullname" + String.valueOf(i));
-            gitItem.setHtml_url("https://github.com/Arthur4718");
-            gitItem.setPull_url("https://github.com/Arthur4718");
-            gitItem.setAvatar_url("https://s.gravatar.com/avatar/398bcf1fa067a7056950d4124b4c9124?s=80");
-            gitItem.setLanguague("Java");
-            GitRepoList.add(gitItem);
-
-        }
-        //Used to test the recycler while there is not connection to the api.
-
-        feedRecyclerView(GitRepoList);
-
-    }
 
     private void feedRecyclerView(List<GitrepoDataModel>  dataList) {
         RecyclerViewAdapter myRecyclerViewAdapter = new RecyclerViewAdapter(getApplicationContext(), dataList);
@@ -144,6 +179,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             //TODO Create new item navigations
+            getDataFromGit();
 
         } else if (id == R.id.nav_gallery) {
 
@@ -154,6 +190,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
+
 
         }
 
