@@ -22,6 +22,7 @@ import com.loopj.android.http.RequestParams;
 
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.ReferenceQueue;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity
     private List<GitrepoDataModel> GitRepoList;
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter myRecyclerViewAdapter;
+    private int datalenght;
 
     //Constants
     private static final String GITAPI_URL = "https://api.github.com/search/repositories?q=language:Java&sort=stars&page=1";
@@ -74,12 +76,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         mRecyclerView = findViewById(R.id.myRecyclerView);
-
-        //Holds all data models in a Array List
         GitRepoList = new ArrayList<>();
-        //populateRecyclerView();
-        //TODO Use the design pattern from this https://www.youtube.com/watch?v=nqty1cT69yk
-
     }
 
 
@@ -87,71 +84,52 @@ public class MainActivity extends AppCompatActivity
 
 
         final AsyncHttpClient client = new AsyncHttpClient();
-        final String url = "https://api.github.com";
-
         final RequestParams params = new RequestParams();
 
-        //params.put("access_token", "571b24031c57ad6fe834");
+
         client.addHeader("User-Agent", "android4718");
 
-        client.get(getApplicationContext(), url,params,  new JsonHttpResponseHandler() {
+        client.get(getApplicationContext(), GITAPI_URL,params,  new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Toast.makeText(getApplicationContext(), "On Success: ", Toast.LENGTH_SHORT).show();
+                try {
+                    datalenght = response.getJSONArray("items").length();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-            }
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Toast.makeText(getApplicationContext(), "On Success: ", Toast.LENGTH_SHORT).show();
-            }
+                for(int i = 0; i < datalenght; i++){
+                    GitrepoDataModel gitItem = new GitrepoDataModel();
+                    try {
+                        gitItem.setRepoName(response.getJSONArray("items").getJSONObject(i).getString("name"));
+                        gitItem.setRepoDesc(response.getJSONArray("items").getJSONObject(i).getString("description"));
+                        gitItem.setForkCount(response.getJSONArray("items").getJSONObject(i).getString("forks"));
+                        gitItem.setStarCount(response.getJSONArray("items").getJSONObject(i).getString("stargazers_count"));
+                        gitItem.setUsername(response.getJSONArray("items").getJSONObject(i).getJSONObject("owner").getString("login"));
+                        gitItem.setFullname(response.getJSONArray("items").getJSONObject(i).getString("full_name"));
+                        gitItem.setHtml_url(response.getJSONArray("items").getJSONObject(i).getString("html_url"));
+                        gitItem.setPull_url(response.getJSONArray("items").getJSONObject(i).getString("pulls_url"));
+                        gitItem.setAvatar_url(response.getJSONArray("items").getJSONObject(i).getJSONObject("owner").getString("avatar_url"));
+                        gitItem.setLanguague("Java");
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(getApplicationContext(), "On Failure: 1 " + String.valueOf(statusCode) + " "+  errorResponse.toString(), Toast.LENGTH_SHORT).show();
-            }
+                        GitRepoList.add(gitItem);
+                        feedRecyclerView(GitRepoList);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                Toast.makeText(getApplicationContext(), "On Failure: 2 " + String.valueOf(statusCode) + " " + errorResponse.toString(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Toast.makeText(getApplicationContext(), "On Failure: 3 " + String.valueOf(statusCode) + " " + throwable.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "On Failure:  " + String.valueOf(statusCode) + " " + throwable.toString(), Toast.LENGTH_SHORT).show();
                 Log.e("GET", "On error " + throwable.toString());
             }
         });
     }
 
-    private void showErrorDialog(String message){
 
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    private void populateRecyclerView(){
-        //TODO remove after setting up the GET method from GIT hub API.
-
-        for(int i = 0; i < 10; i++){
-
-            GitrepoDataModel gitItem = new GitrepoDataModel();
-            gitItem.setRepoName("Repo: " + String.valueOf(i));
-            gitItem.setRepoDesc("Description: " + String.valueOf(i));
-            gitItem.setForkCount("forkCount: " + String.valueOf(i * 10));
-            gitItem.setStarCount("starCount: " + String.valueOf(i * 10));
-            gitItem.setUsername("Username: " + String.valueOf(i));
-            gitItem.setFullname("fullname" + String.valueOf(i));
-            gitItem.setHtml_url("https://github.com/Arthur4718");
-            gitItem.setPull_url("https://github.com/Arthur4718");
-            gitItem.setAvatar_url("https://s.gravatar.com/avatar/398bcf1fa067a7056950d4124b4c9124?s=80");
-            gitItem.setLanguague("Java");
-            GitRepoList.add(gitItem);
-
-        }
-        //Used to test the recycler while there is not connection to the api.
-
-        feedRecyclerView(GitRepoList);
-
-    }
 
     private void feedRecyclerView(List<GitrepoDataModel>  dataList) {
         RecyclerViewAdapter myRecyclerViewAdapter = new RecyclerViewAdapter(getApplicationContext(), dataList);
@@ -212,7 +190,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
-            populateRecyclerView();
+
 
         }
 
