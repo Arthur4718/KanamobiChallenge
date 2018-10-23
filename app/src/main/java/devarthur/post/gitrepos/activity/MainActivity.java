@@ -24,6 +24,7 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.ref.ReferenceQueue;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,9 +88,13 @@ public class MainActivity extends AppCompatActivity
 
         final AsyncHttpClient client = new AsyncHttpClient();
         final String url = "https://api.github.com";
-        client.addHeader("-H", "application/vnd.github+json");
 
-        client.get(getApplicationContext(), url,null,  new JsonHttpResponseHandler() {
+        final RequestParams params = new RequestParams();
+
+        //params.put("access_token", "571b24031c57ad6fe834");
+        client.addHeader("User-Agent", "android4718");
+
+        client.get(getApplicationContext(), url,params,  new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Toast.makeText(getApplicationContext(), "On Success: ", Toast.LENGTH_SHORT).show();
