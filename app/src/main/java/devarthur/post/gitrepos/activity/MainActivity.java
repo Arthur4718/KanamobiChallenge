@@ -1,6 +1,7 @@
 package devarthur.post.gitrepos.activity;
 
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,14 +20,17 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONException;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-import cz.msebera.android.httpclient.entity.mime.Header;
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.entity.ByteArrayEntity;
+import cz.msebera.android.httpclient.entity.ContentType;
 import devarthur.post.gitrepos.R;
 import devarthur.post.gitrepos.adapter.RecyclerViewAdapter;
 import devarthur.post.gitrepos.model.GitrepoDataModel;
@@ -73,46 +77,50 @@ public class MainActivity extends AppCompatActivity
         //Holds all data models in a Array List
         GitRepoList = new ArrayList<>();
         //populateRecyclerView();
-
+        //TODO Use the design pattern from this https://www.youtube.com/watch?v=nqty1cT69yk
 
     }
 
 
-    private void attemptGet() {
-        //TODO Use the design pattern from this https://www.youtube.com/watch?v=nqty1cT69yk
+    private void getDataFromGit() {
+
 
         final AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-        client.addHeader("Accept:", "application/vnd.github.v3+json");
+        final String url = "https://api.github.com";
+        client.addHeader("-H", "application/vnd.github+json");
 
-        params.put("-u","Arthur4718");
-
-        client.post("https://api.github.com", params,  new AsyncHttpResponseHandler() {
-
+        client.get(getApplicationContext(), url,null,  new JsonHttpResponseHandler() {
             @Override
-            public void onStart() {
-                // called before request is started
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Toast.makeText(getApplicationContext(), "On Success: ", Toast.LENGTH_SHORT).show();
+
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                Toast.makeText(getApplicationContext(), "On Success: ", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
-                Toast.makeText(getApplicationContext(), "Request Successs!", Toast.LENGTH_SHORT).show();
-                Log.d("GET", "object: " + responseBody.toString());
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Toast.makeText(getApplicationContext(), "On Failure: 1 " + String.valueOf(statusCode) + " "+  errorResponse.toString(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getApplicationContext(), "Request Failure: " +  String.valueOf(statusCode), Toast.LENGTH_SHORT).show();
-                Log.d("GET", "Failure");
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Toast.makeText(getApplicationContext(), "On Failure: 2 " + String.valueOf(statusCode) + " " + errorResponse.toString(), Toast.LENGTH_SHORT).show();
             }
 
-
-            public void onRetry(int retryNo) {
-                // called when request is retried
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Toast.makeText(getApplicationContext(), "On Failure: 3 " + String.valueOf(statusCode) + " " + throwable.toString(), Toast.LENGTH_SHORT).show();
+                Log.e("GET", "On error " + throwable.toString());
             }
         });
+    }
 
+    private void showErrorDialog(String message){
 
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     private void populateRecyclerView(){
@@ -188,7 +196,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             //TODO Create new item navigations
-            attemptGet();
+            getDataFromGit();
 
         } else if (id == R.id.nav_gallery) {
 
