@@ -174,18 +174,18 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        //TODO use the drawer to show the user how many repos you are listing now
+
 
         if (id == R.id.nav_appInfo) {
 
-            getDataFromService(page);
+
 
 
         } else if (id == R.id.nav_report) {
-            //TODO GO TO REPORT ISSUE
+
 
         } else if (id == R.id.nav_infoAuthor) {
-            //TODO INFORMATION ABOUT the Author
+
 
         } else if (id == R.id.nav_settings) {
             //
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void taskCompleted(String results) {
-        //Toast.makeText(getApplicationContext(),"Task Completed" + results, Toast.LENGTH_SHORT ).show();
+
         updateRecyclerView(results);
     }
 
