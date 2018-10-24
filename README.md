@@ -28,7 +28,7 @@ It shows a list of the top rated Java repositories on Github. Each repo when cli
 
 # Listing repositories. 
 
-In the main actity we set up or view elements, set up the recycler view adapter and swipe refresh. Every time the list is refreshing the user will see a progress bar, however when the list updates the user gets back to the first entry. 
+In the main actity i set up our view elements, set up the recycler view adapter and swipe refresh. Every time the list is refreshing the user will see a progress bar, however when the list updates the user gets back to the first entry. 
 ```java
 
     @Override
