@@ -5,14 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
+import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.client.HttpClient;
 import devarthur.post.gitrepos.R;
 import devarthur.post.gitrepos.adapter.PullViewAdapter;
 import devarthur.post.gitrepos.model.PullDataModel;
@@ -41,7 +39,13 @@ public class RepoPullLIst extends AppCompatActivity {
     //Constants
     private static String BASE_URL = "https://api.github.com/repos/";
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,17 +57,18 @@ public class RepoPullLIst extends AppCompatActivity {
         //Set repo name in the title
         String repo = getIntent().getExtras().getString("RepoName");
         getSupportActionBar().setTitle(repo);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+
 
         //Set user name =
         String username = getIntent().getExtras().getString("Owner");
 
         //Create the url to list the pull requests
         pullListURL = BASE_URL + username + "/" + repo + "/pulls";
-        //Log.d("APP", "URL " + BASE_URL + username + "/" + repo);
+        //Create a list to hold all objects
         PullDataList = new ArrayList<>();
-
-        //progressBar = (ProgressBar) findViewById(R.id.progressBar2);
-        //progressBar.setVisibility(View.VISIBLE);
 
         swipeList = (SwipeRefreshLayout) findViewById(R.id.swipePullList);
         swipeList.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
@@ -78,13 +83,10 @@ public class RepoPullLIst extends AppCompatActivity {
     }
 
 
-
     private void getDataFromNetwork(String URL){
-        //TODO create a JSON request to consume the GIT API and populate te recycler view
+
 
         AsyncHttpClient cli = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-
 
         cli.addHeader("User-Agent", "android4718");
 
@@ -94,8 +96,6 @@ public class RepoPullLIst extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
-
-
 
                 for (int i = 0; i < response.length(); i++){
                     PullDataModel pullItem = new PullDataModel();

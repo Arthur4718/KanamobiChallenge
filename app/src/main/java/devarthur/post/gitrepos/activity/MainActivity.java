@@ -35,12 +35,14 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 import devarthur.post.gitrepos.R;
+import devarthur.post.gitrepos.Service.GitDataClient;
+import devarthur.post.gitrepos.Service.OnLoopjCompleted;
 import devarthur.post.gitrepos.adapter.RecyclerViewAdapter;
 import devarthur.post.gitrepos.model.GitrepoDataModel;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnLoopjCompleted {
 
     //Member Variables.
     private List<GitrepoDataModel> GitRepoList;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity
     private RecyclerViewAdapter myRecyclerViewAdapter;
     private SwipeRefreshLayout swipeContainer;
     private ProgressBar progressBar;
+    private GitDataClient gitClient;
     private int datalenght;
     private int page;
     private boolean isListBottom;
@@ -64,6 +67,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Seting up data client
+        gitClient = new GitDataClient();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -85,7 +90,7 @@ public class MainActivity extends AppCompatActivity
                     progressBar = (ProgressBar) findViewById(R.id.progressBar);
                     progressBar.setVisibility(View.VISIBLE);
                     isListBottom = true;
-                    getDataFromGit();
+                    getDataFromService();
 
                 }
             }
@@ -103,7 +108,7 @@ public class MainActivity extends AppCompatActivity
                 progressBar = (ProgressBar) findViewById(R.id.progressBar);
                 progressBar.setVisibility(View.VISIBLE);
                 swipeContainer.setRefreshing(false);
-                getDataFromGit();
+                getDataFromService();
 
 
             }
@@ -112,9 +117,15 @@ public class MainActivity extends AppCompatActivity
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
-        getDataFromGit();
+        getDataFromService();
 
     }
+
+    private void getDataFromService(){
+        gitClient.getRepoData(1);
+        page = page + 1;
+    }
+
 
 
     private void getDataFromGit() {
@@ -255,5 +266,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    @Override
+    public void taskCompleted(String itemlist) {
+        Toast.makeText(getApplicationContext(), itemlist, Toast.LENGTH_SHORT);
     }
 }
