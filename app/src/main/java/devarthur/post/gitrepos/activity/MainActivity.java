@@ -36,13 +36,12 @@ import java.util.List;
 import cz.msebera.android.httpclient.Header;
 import devarthur.post.gitrepos.R;
 import devarthur.post.gitrepos.Service.GitDataClient;
-import devarthur.post.gitrepos.Service.OnLoopjCompleted;
 import devarthur.post.gitrepos.adapter.RecyclerViewAdapter;
 import devarthur.post.gitrepos.model.GitrepoDataModel;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnLoopjCompleted {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     //Member Variables.
     private List<GitrepoDataModel> GitRepoList;
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity
                     progressBar = (ProgressBar) findViewById(R.id.progressBar);
                     progressBar.setVisibility(View.VISIBLE);
                     isListBottom = true;
-                    getDataFromService();
+                    getDataFromGit();
 
                 }
             }
@@ -108,22 +107,23 @@ public class MainActivity extends AppCompatActivity
                 progressBar = (ProgressBar) findViewById(R.id.progressBar);
                 progressBar.setVisibility(View.VISIBLE);
                 swipeContainer.setRefreshing(false);
-                getDataFromService();
+                getDataFromGit();
 
 
             }
         });
 
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
-        getDataFromService();
+        //progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        //progressBar.setVisibility(View.VISIBLE);
+        //getDataFromService();
 
     }
 
     private void getDataFromService(){
+
         gitClient.getRepoData(1);
-        page = page + 1;
+
     }
 
 
@@ -246,6 +246,9 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             //TODO Create new item navigations - GO TO THE TOP OF THE LIST
 
+            getDataFromService();
+            Toast.makeText(getApplicationContext(), "Resolving item from service", Toast.LENGTH_SHORT).show();
+
 
         } else if (id == R.id.nav_gallery) {
             //TODO GO TO THE BOTTOM OF THE LIST
@@ -269,8 +272,5 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    @Override
-    public void taskCompleted(String itemlist) {
-        Toast.makeText(getApplicationContext(), itemlist, Toast.LENGTH_SHORT);
-    }
+
 }

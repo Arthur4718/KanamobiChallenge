@@ -7,14 +7,10 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONException;
+
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import cz.msebera.android.httpclient.Header;
-import devarthur.post.gitrepos.model.GitrepoDataModel;
+
 
 public class GitDataClient {
 
@@ -22,15 +18,13 @@ public class GitDataClient {
     AsyncHttpClient client = new AsyncHttpClient();
     RequestParams params = new RequestParams();
     private Context context;
-    private OnLoopjCompleted listener;
     private int datalenght;
 
 
-    public GitDataClient(AsyncHttpClient client, RequestParams params, Context context, OnLoopjCompleted listener, int datalenght) {
+    public GitDataClient(AsyncHttpClient client, RequestParams params, Context context, int datalenght) {
         this.client = client;
         this.params = params;
         this.context = context;
-        this.listener = listener;
         this.datalenght = datalenght;
     }
 
@@ -51,9 +45,6 @@ public class GitDataClient {
 
                 Log.i("APP", "onSuccess: " + response.toString());
 
-                //listener.taskCompleted("hi")
-                //ToDo  reset your steps and check the interface
-                //https://code.tutsplus.com/tutorials/an-introduction-to-loopj--cms-26781
             }
 
             @Override
