@@ -29,7 +29,8 @@ It shows a list of the top rated Java repositories on Github. Each repo when cli
 # Listing repositories. 
 
 In the main actity we set up or view elements, set up the recycler view adapter and swipe refresh. Every time the list is refreshing the user will see a progress bar, however when the list updates the user gets back to the first entry. 
-'''Java
+```java
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,11 +92,12 @@ In the main actity we set up or view elements, set up the recycler view adapter 
 
     }
 
-'''
+```
 
 The getDataFromService is call to the method created inside the service package, on the GitDataClient. This method was applied in order to remove the client get method from the Activity. This recomendation comes from loopj library documentation and from the MVC design pattern. 
 
-'''Java
+```java
+
   public class GitDataClient {
 
     private static final String GITAPI_URL = "https://api.github.com/search/repositories?q=language:Java&sort=stars&page=";
@@ -149,11 +151,12 @@ The getDataFromService is call to the method created inside the service package,
 
 
 
-'''
+```
 
 Unfortunately i was not able to implemen a Presenter class wich will remove some code from the main activity. Using the presenter as a middle man the class would be litghter and easier to read. In the main activity class the method responsible for updates in the view is the updateRecyclerView method, it receiveis the data from the GitDataClient interface as a callback. 
 
-'''Java
+```java
+
   private void updateRecyclerView(String results) {
 
         JSONObject response = null;
@@ -197,7 +200,7 @@ Unfortunately i was not able to implemen a Presenter class wich will remove some
 
     }
 
-'''
+```
 
 Every item added to the recycler view has its own onclick listener. I added both cardview and textview listeners to prevent the user from clicking in the description and receiving no feedback. The repo name and the owner are passed by intent extra do the next screen.
 In order to better visualize the json i created the structore of the Json Array response on this link. When the list is done updating i added page++, so when the user tries to update the list he will receive the data from more pages. 
@@ -213,7 +216,7 @@ http://www.jsonmate.com/permalink/5bc7b62a85da04b10bcf7bb5
 Every pull list item has its own onclick listener. The OpenPullBrowser its the method responsible for opening the pull url in the device browser. 
 
 
-'''Java
+```java
  
     public void onBindViewHolder(PullViewHolder holder, final int i) {
 
@@ -257,11 +260,11 @@ Every pull list item has its own onclick listener. The OpenPullBrowser its the m
 
 
     }
-'''
+```
 
 In the RepoPullList activity will you find the client call to the endpoint, which is formed with data from the get intent, and will also find the Activity does not have a class to separe the logic from the UI. 
 
-'''Java
+```java
   private void getDataFromNetwork(String URL){
 
 
@@ -310,12 +313,12 @@ In the RepoPullList activity will you find the client call to the endpoint, whic
 
             }
 
-'''
+```
 # Layout 
 
 I used Constraint layout because its the easier way(in my point of view) to construct views that suport portrait and landscape mode. I used the standard layouts from Android SDK, Navigation Drawer and Basic Activity, since there is no need to a more detailed application of UX patterns in this project.  
 
-'''XML
+```XML
 
   <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -449,14 +452,10 @@ I used Constraint layout because its the easier way(in my point of view) to cons
             app:layout_constraintTop_toBottomOf="@+id/repoDesc" />
 
     </android.support.constraint.ConstraintLayout>
-
-
-
-
 </android.support.v7.widget.CardView>
 
 
-'''
+```
 
 # Next steps.
 
