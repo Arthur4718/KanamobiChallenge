@@ -98,8 +98,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         //Owner
         intent.putExtra("Owner", mData.get(position).getUsername());
 
-        //TODO send information about how much pulls are open or closed
-
         mContext.startActivity(intent);
 
 

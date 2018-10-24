@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity
 
         mRecyclerView = findViewById(R.id.myRecyclerView);
         GitRepoList = new ArrayList<>();
-        page = 1; // TODO Override the method on resume on this activity and store the state of the list
+        page = 1;
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -111,7 +111,11 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //TODO save the state of the list when the user rotates the app
+    }
 
     private void feedRecyclerView(List<GitrepoDataModel>  dataList) {
         RecyclerViewAdapter myRecyclerViewAdapter = new RecyclerViewAdapter(getApplicationContext(), dataList);
@@ -161,26 +165,19 @@ public class MainActivity extends AppCompatActivity
 
         //TODO use the drawer to show the user how many repos you are listing now
 
-        if (id == R.id.nav_camera) {
-            //TODO Create new item navigations - GO TO THE TOP OF THE LIST
+        if (id == R.id.nav_appInfo) {
+
             getDataFromService(page);
 
 
+        } else if (id == R.id.nav_report) {
+            //TODO GO TO REPORT ISSUE
 
+        } else if (id == R.id.nav_infoAuthor) {
+            //TODO INFORMATION ABOUT the Author
 
-        } else if (id == R.id.nav_gallery) {
-            //TODO GO TO THE BOTTOM OF THE LIST
-
-        } else if (id == R.id.nav_slideshow) {
-            //TODO INFORMATION ABOUT THE APP
-
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_settings) {
             //
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
 
         }
 
@@ -198,7 +195,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateRecyclerView(String results) {
-
+        //TODO remove this and aplly this logic on a Presenter class
         JSONObject response = null;
         try {
             response = new JSONObject(results);

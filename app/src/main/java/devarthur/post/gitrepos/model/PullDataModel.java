@@ -9,12 +9,13 @@ package devarthur.post.gitrepos.model;
 public class PullDataModel {
 
     //Member Variables
-    String pullTitle;
-    String pullDescription;
-    String pullAvatarUrl;
-    String pullUsername;
-    String pullFullname;
-    String pullURL; //Get via intent, it will open the pull request in a browser
+    private String pullTitle;
+    private String pullDescription;
+    private String pullAvatarUrl;
+    private String pullUsername;
+    private String pullFullname;
+    private String pullURL;
+
 
     public PullDataModel() {
 

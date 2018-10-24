@@ -89,11 +89,9 @@ public class PullViewAdapter extends RecyclerView.Adapter<PullViewAdapter.PullVi
     }
 
     private void OpenPullInBrowser(int position){
-       //TODO read the pull url and open it in the browser, check the data model to see if holds the pull url.
 
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mData.get(position).getPullURL()));
         mContext.startActivity(browserIntent);
-
 
 
     }

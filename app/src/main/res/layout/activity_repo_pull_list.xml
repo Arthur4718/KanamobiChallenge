@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:text="20 opened"
+                android:text="- opened"
                 android:textColor="@android:color/white"
                 android:textSize="16dp"
                 android:textStyle="bold" />
@@ -46,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
-                android:text="700 closed"
+                android:text="- closed"
                 android:textColor="@android:color/white"
                 android:textSize="16dp" />
 
