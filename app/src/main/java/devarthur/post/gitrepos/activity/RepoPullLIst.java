@@ -33,7 +33,6 @@ public class RepoPullLIst extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private PullViewAdapter myRecyclerViewAdapter;
     private ProgressBar progressBar;
-    private String text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent at ultrices turpis. Vivamus molestie faucibus velit, a lobortis enim accumsan a. Curabitur facilisis cursus rutrum";
     private String pullListURL;
     private SwipeRefreshLayout swipeList;
     private TextView pullsOpen;
@@ -61,8 +60,6 @@ public class RepoPullLIst extends AppCompatActivity {
         //Set the count for open and closed pulls
 
 
-
-
         //Set user name
         String username = getIntent().getExtras().getString("Owner");
 
@@ -75,7 +72,7 @@ public class RepoPullLIst extends AppCompatActivity {
         swipeList.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         //Load the first page
         getDataFromNetwork(pullListURL);
-        //Todo apply a progress bar to give some feedback to the user
+
         //Reload on user action
         swipeList.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
