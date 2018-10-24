@@ -84,16 +84,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
-        holder.repoDesc_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OpenPullList(mData, position);
-            }
-    });
+
+
     }
 
     private void OpenPullList(List<GitrepoDataModel> data , int position){
-        //TODO USE INTENT PUT EXTRA TO PASS INFORMATION TO THE NEXT SCREEN.
+
 
         //Set data to be passed through intent
         Intent intent = new Intent(mContext, RepoPullLIst.class);
@@ -101,6 +97,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         intent.putExtra("RepoName", mData.get(position).getRepoName());
         //Owner
         intent.putExtra("Owner", mData.get(position).getUsername());
+
+        //TODO send information about how much pulls are open or closed
 
         mContext.startActivity(intent);
 

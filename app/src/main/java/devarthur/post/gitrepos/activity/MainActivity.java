@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity
 
 
     private void getDataFromGit() {
-
+        //  TODO create a service class with this code
 
         final AsyncHttpClient client = new AsyncHttpClient();
         final RequestParams params = new RequestParams();
@@ -178,6 +178,8 @@ public class MainActivity extends AppCompatActivity
                 Log.e("GET", "On error " + throwable.toString());
             }
         });
+
+
     }
 
 
