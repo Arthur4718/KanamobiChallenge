@@ -17,16 +17,17 @@ import cz.msebera.android.httpclient.HttpResponse;
 public class GitDataClient {
 
     private static final String GITAPI_URL = "https://api.github.com/search/repositories?q=language:Java&sort=stars&page=";
-    AsyncHttpClient client = new AsyncHttpClient();
-    RequestParams params = new RequestParams();
+    private AsyncHttpClient client;
+    private RequestParams params;
     private Context context;
-    private int datalenght;
+    private OnLoopjCompleted loopjListener;
 
-    public GitDataClient(AsyncHttpClient client, RequestParams params, Context context, int datalenght) {
-        this.client = client;
-        this.params = params;
+    public GitDataClient(Context context, OnLoopjCompleted listener) {
+
+        client = new AsyncHttpClient();
+        params = new RequestParams();
         this.context = context;
-        this.datalenght = datalenght;
+        this.loopjListener = listener;
     }
 
     public GitDataClient() {
@@ -48,8 +49,8 @@ public class GitDataClient {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
-                //listener.taskCompleted(response.toString());
-                Log.i("APP", "onSuccess: " + response.toString());
+                loopjListener.taskCompleted(response.toString());
+                Log.i("APP", "on Success: " + statusCode);
                
             }
 
