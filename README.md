@@ -153,7 +153,7 @@ The getDataFromService is call to the method created inside the service package,
 
 ```
 
-Unfortunately i was not able to implemen a Presenter class wich will remove some code from the main activity. Using the presenter as a middle man the class would be litghter and easier to read. In the main activity class the method responsible for updates in the view is the updateRecyclerView method, it receiveis the data from the GitDataClient interface as a callback. 
+Unfortunately i was not able to implement a Presenter class wich will remove some code from the main activity. Using the presenter as a middle man the class would be litghter and easier to read. In the main activity class the method responsible for updates in the view is the updateRecyclerView method, it receiveis the data from the GitDataClient interface as a callback. 
 
 ```java
 
