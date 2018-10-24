@@ -1,4 +1,4 @@
-package devarthur.post.gitrepos.Service;
+package devarthur.post.gitrepos.service;
 
 import android.content.Context;
 import android.util.Log;

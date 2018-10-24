@@ -2,6 +2,7 @@ package devarthur.post.gitrepos.activity;
 
 import android.os.Bundle;
 
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -27,14 +28,15 @@ import java.util.List;
 
 
 import devarthur.post.gitrepos.R;
-import devarthur.post.gitrepos.Service.GitDataClient;
-import devarthur.post.gitrepos.Service.OnLoopjCompleted;
+import devarthur.post.gitrepos.service.GitDataClient;
+import devarthur.post.gitrepos.service.OnLoopjCompleted;
 import devarthur.post.gitrepos.adapter.RecyclerViewAdapter;
 import devarthur.post.gitrepos.model.GitrepoDataModel;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnLoopjCompleted{
+
 
     //Member Variables.
     private List<GitrepoDataModel> GitRepoList;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     private int datalenght;
     private int page;
     private boolean isListBottom;
+    private boolean updateList;
     private OnLoopjCompleted listener;
 
 
@@ -76,11 +79,11 @@ public class MainActivity extends AppCompatActivity
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (!recyclerView.canScrollVertically(1)) {
-                     Toast.makeText(getApplicationContext(), "List Updated...", Toast.LENGTH_LONG).show();
-                    progressBar = (ProgressBar) findViewById(R.id.progressBar);
-                    progressBar.setVisibility(View.VISIBLE);
-                    isListBottom = true;
-                    getDataFromService(page);
+                     Toast.makeText(getApplicationContext(), "Bottom...", Toast.LENGTH_LONG).show();
+                     progressBar = (ProgressBar) findViewById(R.id.progressBar);
+                     progressBar.setVisibility(View.VISIBLE);
+
+                     getDataFromService(page);
 
                 }
             }
@@ -118,9 +121,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void feedRecyclerView(List<GitrepoDataModel>  dataList) {
-        RecyclerViewAdapter myRecyclerViewAdapter = new RecyclerViewAdapter(getApplicationContext(), dataList);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        mRecyclerView.setAdapter(myRecyclerViewAdapter);
+
+
+            RecyclerViewAdapter myRecyclerViewAdapter = new RecyclerViewAdapter(getApplicationContext(), dataList);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+            mRecyclerView.setAdapter(myRecyclerViewAdapter);
+
+            if (updateList){
+                myRecyclerViewAdapter.notifyDataSetChanged();
+            }
+
+
     }
 
 
@@ -195,7 +206,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateRecyclerView(String results) {
-        //TODO remove this and aplly this logic on a Presenter class
+
         JSONObject response = null;
         try {
             response = new JSONObject(results);
@@ -224,13 +235,11 @@ public class MainActivity extends AppCompatActivity
 
 
             } catch (JSONException e) {
+                Toast.makeText(getApplicationContext(),"Please check your connection", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
         }
-        if (isListBottom){
-            mRecyclerView.smoothScrollToPosition(GitRepoList.size());
-            isListBottom = false;
-        }
+
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
         swipeContainer.setRefreshing(false);
@@ -244,4 +253,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //todo use this method to store the recycler view state
+        super.onSaveInstanceState(outState);
+    }
 }

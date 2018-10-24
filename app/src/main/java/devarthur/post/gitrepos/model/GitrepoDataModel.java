@@ -19,8 +19,6 @@ public class GitrepoDataModel {
     private String avatar_url;
     private String languague;
 
-    // You can check the JSON object structure at
-    // http://www.jsonmate.com/permalink/5bc7b62a85da04b10bcf7bb5
 
     public GitrepoDataModel() {
 
