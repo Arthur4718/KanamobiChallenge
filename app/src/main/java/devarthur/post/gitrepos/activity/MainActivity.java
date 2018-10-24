@@ -273,4 +273,34 @@ public class MainActivity extends AppCompatActivity
 
 
 
+    private void updateRecyclerView(String results) {
+
+        try {
+
+            JSONObject response = new JSONObject(results);
+            GitrepoDataModel gitItem = new GitrepoDataModel();
+            gitItem.setRepoName(response.getJSONArray("items").getJSONObject(0).getString("name"));
+            gitItem.setRepoDesc(response.getJSONArray("items").getJSONObject(0).getString("description"));
+            gitItem.setForkCount(response.getJSONArray("items").getJSONObject(0).getString("forks"));
+            gitItem.setStarCount(response.getJSONArray("items").getJSONObject(0).getString("stargazers_count"));
+            gitItem.setUsername(response.getJSONArray("items").getJSONObject(0).getJSONObject("owner").getString("login"));
+            gitItem.setFullname(response.getJSONArray("items").getJSONObject(0).getString("full_name"));
+            gitItem.setHtml_url(response.getJSONArray("items").getJSONObject(0).getString("html_url"));
+            gitItem.setPull_url(response.getJSONArray("items").getJSONObject(0).getString("pulls_url"));
+            gitItem.setAvatar_url(response.getJSONArray("items").getJSONObject(0).getJSONObject("owner").getString("avatar_url"));
+            gitItem.setLanguague("Java");
+
+            GitRepoList.add(gitItem);
+            feedRecyclerView(GitRepoList);
+
+
+        } catch (Throwable tx) {
+            Log.e("My App", "Could not parse malformed JSON: ");
+        }
+
+
+    }
+
+
+
 }

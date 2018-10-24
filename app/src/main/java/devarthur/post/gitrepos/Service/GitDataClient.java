@@ -6,10 +6,12 @@ import android.util.Log;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.ResponseHandlerInterface;
 
 
 import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpResponse;
 
 
 public class GitDataClient {
@@ -19,7 +21,6 @@ public class GitDataClient {
     RequestParams params = new RequestParams();
     private Context context;
     private int datalenght;
-
 
     public GitDataClient(AsyncHttpClient client, RequestParams params, Context context, int datalenght) {
         this.client = client;
@@ -38,19 +39,25 @@ public class GitDataClient {
 
 
         client.get(REQUEST_URL, null, new JsonHttpResponseHandler() {
+            @Override
+            public void onPostProcessResponse(ResponseHandlerInterface instance, HttpResponse response) {
+                super.onPostProcessResponse(instance, response);
+
+            }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
-
+                //listener.taskCompleted(response.toString());
                 Log.i("APP", "onSuccess: " + response.toString());
-
+               
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 Log.i("APP", "On Failure: " + String.valueOf(statusCode) + " " + errorResponse.toString());
+                
             }
         });
 
