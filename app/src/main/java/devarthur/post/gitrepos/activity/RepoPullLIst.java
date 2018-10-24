@@ -34,14 +34,13 @@ public class RepoPullLIst extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private PullViewAdapter myRecyclerViewAdapter;
     private ProgressBar progressBar;
-    private int datalenght;
     private String text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent at ultrices turpis. Vivamus molestie faucibus velit, a lobortis enim accumsan a. Curabitur facilisis cursus rutrum";
     private String pullListURL;
     private SwipeRefreshLayout swipeList;
 
     //Constants
     private static String BASE_URL = "https://api.github.com/repos/";
-    //https://api.github.com/repos/
+
 
 
     @Override
@@ -97,16 +96,19 @@ public class RepoPullLIst extends AppCompatActivity {
                 super.onSuccess(statusCode, headers, response);
 
 
-                int size = response.length();
-                for (int i = 0; i < size; i++){
+
+                for (int i = 0; i < response.length(); i++){
                     PullDataModel pullItem = new PullDataModel();
                     try {
 
+                        //Fetch items
                         pullItem.setPullTitle(response.getJSONObject(i).getString("title"));
                         pullItem.setPullDescription(response.getJSONObject(i).getString("body"));
                         pullItem.setPullAvatarUrl(response.getJSONObject(i).getJSONObject("user").getString("avatar_url"));
                         pullItem.setPullUsername(response.getJSONObject(i).getJSONObject("user").getString("login"));
                         pullItem.setPullFullname(pullItem.getPullUsername() + " " + pullItem.getPullTitle());
+                        pullItem.setPullURL(response.getJSONObject(i).getString("html_url"));
+                        //Update the list
                         PullDataList.add(pullItem);
                         feedRecyclerView(PullDataList);
 
